@@ -22,12 +22,14 @@ def mostrar_linea(nomArchivo,nLinea):
                 #Condción por si no existe la linea ingresada
                 if not existeLinea:
                     print("La línea ingresada no existe en el archivo")
+                    nLinea = int(input('Ingrese el número de línea: '))
                 ## Cierro el archivo
                 arch.close()
                 # Booleano de existencia del archivo en true
                 existeArchivo = True
             except IOError:
                 print("Error al abrir algun archivo")
+                nomArchivo = input('Ingrese la ruta del archivo: ')
 
 
 ## PROGRAMA PRINCIPAL
