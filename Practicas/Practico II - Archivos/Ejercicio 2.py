@@ -5,7 +5,7 @@ def mostrar_linea(nomArchivo,nLinea):
     #Booleano para saber si existe la linea ingresada
         existeArchivo = False
     ##  While para que el ciclo se repita hasta que se ingrese una ruta válida y una línea válida
-        while (not existeLinea) and (not existeArchivo):
+        while (not existeLinea) or (not existeArchivo):
             ##Try: 
             try:
                 ## Abro el arhcivo

@@ -1,0 +1,9 @@
+Primer paso, instalar Visual C++ de aquí: https://www.microsoft.com/en-us/download/details.aspx?id=52685
+
+Segunda paso, instalar wxPython desde el gestor de paquetes de Thonny
+
+Tercer paso, instalar pyo desde el gestor de paquetes de Thonny
+
+Información sobre pyo: web oficial
+* http://ajaxsoundstudio.com/software/pyo/
+* http://ajaxsoundstudio.com/pyodoc/
