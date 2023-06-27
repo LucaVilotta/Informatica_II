@@ -7,12 +7,11 @@ print("Cálculo de tiempo de reverberación (TR60) en sala\n")
 
 S = 0.0 # superficie total
 a_total = 0.0 # absorción total
-a_total_list = [0,0,0,0,0,0] # absorción total lista
-contador = 0 # contador
-
-# Frecuecia
-
-
+matriz_a = [[]]
+lista_a_total = [0,0,0,0,0,0] # lista inicializada con la cantidad de frecuencias disponibles
+lista_TR = [] # lista de TR por frecuencia
+contador_material = 0
+contador_frecuencias = 0 
 # Mostramos los materiales
 
 mostrar_materiales()
@@ -20,10 +19,17 @@ mostrar_materiales()
 while True:
     
     # ingresamos cada superficie sin distinción (techo, pared, piso)
+    # junto a su coeficiente de absorción
     
     sup = float(input("Ingrese superficie [m2]: "))
     material = int(input("Ingrese el código del material: "))
     
+    #For para iterar las frecuencias y guardarlo en una matriz donde las filas son cada material nuevo ingresado y...
+    #...las columnas el coef de abs por frecuencia de ese material
+    for frecuencia in frecuencias: 
+        a   = mostrar_coeficiente(material,frecuencia)
+        matriz_a[contador_material].append(a)
+        
     
     tiene_abertura = input("Posee la superficie aberturas? (s/n): ")
     
@@ -39,19 +45,18 @@ while True:
             abs_aber = float(input("Ingrese coeficiente de abertura [m2]: "))
             
             sup -= sup_aber #a la superficie le resto la abertura
-            a_total += sup_aber*abs_aber
+            
+            for cab in range(len(frecuencias)): 
+                lista_a_total[cab] += sup_aber*abs_aber
             
             op_aber = input("Desea ingresar otra abertura a esa superficie? (s/n): ")
             
             if op_aber.lower() == "n":
                 break
-    #For para calcular el a y el a_total dependiendo de la frecuecia y almacenarlos en una lista
-    for frecuencia in frecuencias:
-        a   = mostrar_coeficiente(material,frecuencia)
-        a_total += sup*a # sumamos el producto (a_i*S_i) al total
-        a_total_list[contador] += a_total
-        contador += 1
-    contador = 0
+    
+    # Nuevamente itero las frecuencias para obtener el coef de abs de ese material y guardo un a_total por frecuencia en la lista_a_total
+    for c in range(len(frecuencias)): 
+        lista_a_total[c] += sup*matriz_a[contador_material][c] # sumamos el producto (a_i*S_i) al total
     S += sup # sumamos la superficie al total
     
     op = input("Desea ingresar otra superficie? (s/n) ")
@@ -59,32 +64,29 @@ while True:
     if op.lower() == "n":
         break
     
+    contador_material += 1 #incrementamos el contador para iterar la matriz_a
+    matriz_a.append([])
+    
 # calculo final de a_total:
-for a_final in a_total_list:
-    a_total_list[contador] /= S
-    contador += 1
-contador = 0
+for c2 in range(len(frecuencias)): 
+    lista_a_total[c2] /= S
 
 # con este algoritmo no podemos calcular el volumen automáticamente:
 V = float(input("Ingrese volumen total de la sala [m3]: "))
 
+# TR dependiendo de cada a_total
+for c3 in range(len(frecuencias)):
+    if lista_a_total[c3] < 0.3:
+        TR60 = TR_sabine(V,S,lista_a_total[c3])
+    elif lista_a_total[c3] > 0.3:
+        TR60 = TR_sabine(V,S,lista_a_total[c3])
+    lista_TR.append(TR60) # lo agrego a una lista de TR
+        
+
 # mostrar resultados:
 print("Volumen = %.2f[m3]"%(V))
 print("Superficie = %.2f[m2]"%(S))
-for c in range(len(frecuencias)):
-    print("La absorción total para la frecuencia de %f es = %.2f"%(frecuencias[c], a_total_list[c]))
-# TR dependiendo de a_total
-# ACÁ EL A TOTAL LO TENG QUE ITERAR DE LA LISTA PARA VER SI ->!CADA UNO!<- ES MAYOR O MENOR AL VALOR 0.3
-if a_total < 0.3:
-    for a_promedio in a_total_list:
-        TR60 = TR_sabine(V,S,a_promedio)
-        print("El TR60 para la frecuencia de %f es = %.4f[s]"%(frecuencias[contador],TR60))
-        contador +=1
-elif a_total > 0.3:
-    contador = 0
-    for a_promedio in a_total_list:
-        TR60 = TR_sabine(V,S,a_promedio)
-        print("El TR60 para la frecuencia de %f es = %.4f[s]"%(frecuencias[contador],TR60))
-        contador +=1
 
 
+print("TR60 por frecuencia = ",  end="")
+print(lista_TR)
