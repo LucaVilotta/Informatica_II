@@ -1,0 +1,4 @@
+Madera con cámara de 25mm; 3.18; 0.19
+Contrachapado de madera fino; 5.70; 0.42
+Bloque de hormigón pintado; 2.05; 0.11
+Hormigón; 4.05; 0.02

@@ -30,6 +30,8 @@ def procesa_lista(lista):
     return lista_procesada
 
 procesa_lista([2,3,3,5,7,10])
+
+## Si no se visualiza correctamente por el espaciado también lo subí a github: https://github.com/LucaVilotta/Informatica_II/tree/main/Parcial%20informatica%20II
     
         
         
